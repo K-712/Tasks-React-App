@@ -22,10 +22,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log("updating userinfo");
     if (toDoList.length > 0 || doneList.length > 0) {
       setUserInfo(prev => {
-        console.log(saveListToUser(data.listname, toDoList, doneList, prev));
         return saveListToUser(data.listname, toDoList, doneList, prev);
       });
     }
@@ -74,7 +72,7 @@ function App() {
   return (
     <div className="container">
       <section className="heading">
-        <h1>To-do List</h1>
+        <h1>{data.listname}</h1>
 
         <InputArea handleAdd={handleAdd} />
       </section>
