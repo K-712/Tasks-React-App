@@ -4,7 +4,8 @@ import ToDoItem from "./components/ToDoItem.jsx";
 import DoneItem from "./components/DoneItem.jsx";
 import EmptyToDo from "./components/EmptyToDo";
 import getUser from "./functions/getUser.js";
-import { getTodoList } from "./functions/getList.js";
+import { getTodoList, getDoneList } from "./functions/getList.js";
+import saveListToUser from "./functions/saveList.js";
 
 function App() {
   const [data, setData] = useState({ user: "User", listname: "To Do List" });
@@ -15,10 +16,20 @@ function App() {
   useEffect(() => {
     getUser(data.user).then(res => {
       setUserInfo(res[0]);
-      setToDoList(res[0].lists.filter(list => list.listname === data.listname)[0].todo);
-      setDoneList(res[0].lists.filter(list => list.listname === data.listname)[0].done);
+      setToDoList(getTodoList(res[0], data.listname));
+      setDoneList(getDoneList(res[0], data.listname));
     });
   }, []);
+
+  useEffect(() => {
+    console.log("updating userinfo");
+    if (toDoList.length > 0 || doneList.length > 0) {
+      setUserInfo(prev => {
+        console.log(saveListToUser(data.listname, toDoList, doneList, prev));
+        return saveListToUser(data.listname, toDoList, doneList, prev);
+      });
+    }
+  }, [toDoList, doneList]);
 
   function handleAdd(toDo) {
     setToDoList(prev => {

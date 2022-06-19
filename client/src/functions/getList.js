@@ -1,12 +1,8 @@
 function getTodoList(userInfo, listname) {
-  userInfo.lists.map((e, i) => {
-    if (e.listname === listname) {
-      return e.todo;
-    }
-  });
+  return userInfo.lists.filter(list => list.listname === listname)[0].todo;
 }
 
 function getDoneList(userInfo, listname) {
-  return;
+  return userInfo.lists.filter(list => list.listname === listname)[0].done;
 }
 export { getTodoList, getDoneList };
