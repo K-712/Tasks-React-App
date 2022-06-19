@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InputArea from "./components/InputArea.jsx";
 import ToDoItem from "./components/ToDoItem.jsx";
 import DoneItem from "./components/DoneItem.jsx";
 import EmptyToDo from "./components/EmptyToDo";
+import getUser from "./functions/getUser.js";
+import { getTodoList } from "./functions/getList.js";
+
 function App() {
+  const [data, setData] = useState({ user: "User", listname: "To Do List" });
+  const [userInfo, setUserInfo] = useState();
   const [toDoList, setToDoList] = useState([]);
   const [doneList, setDoneList] = useState([]);
+
+  useEffect(() => {
+    getUser(data.user).then(res => {
+      setUserInfo(res[0]);
+      setToDoList(res[0].lists.filter(list => list.listname === data.listname)[0].todo);
+      setDoneList(res[0].lists.filter(list => list.listname === data.listname)[0].done);
+    });
+  }, []);
 
   function handleAdd(toDo) {
     setToDoList(prev => {
@@ -50,7 +63,7 @@ function App() {
   return (
     <div className="container">
       <section className="heading">
-        <h1>Tasks</h1>
+        <h1>To-do List</h1>
 
         <InputArea handleAdd={handleAdd} />
       </section>
